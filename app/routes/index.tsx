@@ -18,7 +18,7 @@ const constraint: FieldsetConstraint<FormType> = {
 export let action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
   const submission = parse<FormType>(formData)
-  console.log('POST:', submission)
+  console.log('SERVER POST:', submission)
   switch (submission.type) {
     case 'submit':
     case 'validate': {
@@ -29,7 +29,7 @@ export let action = async ({ request }: ActionArgs) => {
       }
 
       if (!submission.value.answer) {
-        submission.error.push(['answert', 'Bitte SERVER Antwort auswählen!']);
+        submission.error.push(['answer', 'Bitte SERVER Antwort auswählen!']);
       }
     }
   }
@@ -67,6 +67,7 @@ export default function Index() {
     onSubmit(event, { formData }) {
       event.preventDefault()
       console.log('POSTED:', Object.fromEntries(formData))
+      event.target.submit()
     },
   })
   const { field1, answer } = useFieldset(form.ref, {... form.config, constraint})
@@ -82,13 +83,13 @@ export default function Index() {
           <div className="field-error">{field1.error}</div>
         </label>
         <label>
-          <div>Antwort</div>
-          <input value="a" {...conform.input(answer.config, {type: 'radio'})}/> A
-          <input value="b" {...conform.input(answer.config,{type: 'radio'})}/> B
+          <div>Answer</div>
+          <input {...conform.input(answer.config, {type: 'radio', value: 'a'})}/> A
+          <input {...conform.input(answer.config,{type: 'radio', value: 'b'})}/> B
           <div className="field-error">{answer.error}</div>
         </label>
 
-        <button type="submit">Abschicken!</button>
+        <button type="submit">Post!</button>
       </Form>
     </div>
   )
