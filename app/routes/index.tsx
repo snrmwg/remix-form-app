@@ -23,13 +23,13 @@ export let action = async ({ request }: ActionArgs) => {
     case 'submit':
     case 'validate': {
       if (!submission.value.field1) {
-        submission.error.push(['field1', 'field1 ist SERVER erforderlich']);
+        submission.error.push(['field1', 'field1 is SERVER required']);
       } else if (!submission.value.field1.endsWith('xxx')) {
-        submission.error.push(['field1', `muss mit SERVER 'xxx' enden`])
+        submission.error.push(['field1', `end with 'xxx' by SERVER`])
       }
 
       if (!submission.value.answer) {
-        submission.error.push(['answer', 'Bitte SERVER Antwort auswählen!']);
+        submission.error.push(['answer', 'Please select SERVER answer']);
       }
     }
   }
@@ -51,24 +51,19 @@ export default function Index() {
         switch (element.name) {
           case 'field1':
             if (element.validity.valueMissing) {
-              submission.error.push([element.name, `${element.name} ist erforderlich`])
+              submission.error.push([element.name, `${element.name} is required`])
             } else if (!element.value.endsWith('xxx')) {
-              submission.error.push([element.name, `${element.name} muss mit 'xxx' enden`])
+              submission.error.push([element.name, `${element.name} should end with 'xxx'`])
             }
             break
           case 'answer':
             if (element.validity.valueMissing) {
-              submission.error.push([element.name, `Bitte eine Antwort wählen`])
+              submission.error.push([element.name, `Please choose an answer`])
             }
         }
       }
       return submission
-    },
-    onSubmit(event, { formData }) {
-      event.preventDefault()
-      console.log('POSTED:', Object.fromEntries(formData))
-      event.target.submit()
-    },
+    }
   })
   const { field1, answer } = useFieldset(form.ref, {... form.config, constraint})
 
